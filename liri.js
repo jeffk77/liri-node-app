@@ -1,3 +1,5 @@
+// Establishing required source npm packages and files.
+
 require("dotenv").config();
 
 var twitter_keys = require("./keys.js");
@@ -13,30 +15,35 @@ var command = process.argv[2];
 var argument = process.argv[3];
 
 
-
+// Creation of "runCommand", to accept user input for each of the programmed functions.
 function runCommand(command, argument) {
 
 	if (command === 'my-tweets') {
 
-		var client = new Twitter (twitter_keys.twitter);
-		
+		// New twitter account feed to be accepted.
+		var client = new Twitter(twitter_keys.twitter);
+
 		var params = {
 			screen_name: 'jkush80'
 		};
+
+		// Establishing format of user timeline feedback, providing content of tweets, and tweet dates.
 		client.get('statuses/user_timeline', params, function (error, tweets) {
 			if (!error) {
 				console.log("Tweets")
 				console.log("______________")
 				tweets.forEach((tweets) => {
-					console.log(tweets.created_at),
-					console.log(tweets.text)
+					console.log("\n" + tweets.created_at),
+						console.log(tweets.text)
 				})
 			}
 		});
 	} else if (command === 'spotify-this-song') {
-		
-		var spotify = new Spotify (spotify_keys.spotify);
 
+		// New Spotify account feed to be accepted.
+		var spotify = new Spotify(spotify_keys.spotify);
+
+		// Establishing format of song data feedback, for Artist, Song, and URL for entered user input.
 		spotify.search({
 			type: 'track',
 			query: argument
@@ -61,6 +68,7 @@ function runCommand(command, argument) {
 
 			if (!error && response.statusCode === 200) {
 
+				// Establishing format of IMDB data feedback, for all relevant movie details, per user input.
 				var res = JSON.parse(body);
 				console.log("Title: " + res.Title);
 				console.log("Year: " + res.Year);
@@ -74,9 +82,9 @@ function runCommand(command, argument) {
 			}
 		});
 	}
-
-
 }
+
+// Final request option, to display whatever the content is of the file "random.txt".
 if (command === 'do-what-it-says') {
 	fs.readFile("random.txt", "utf-8", function (err, data) {
 		if (err) {
